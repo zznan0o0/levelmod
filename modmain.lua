@@ -15,6 +15,11 @@ local function setCharacterAttribute(inst)
   -- inst.components.combat.defaultdamage = (inst.init_defaultdamage + inst.LevelupLevel / 10)
 end
 
+local function say(inst) 
+  local talk_str = string.format("level: %d, exp: %d/%d", inst.LevelupLevel, inst.LevelupExp, math.ceil(inst.LevelupNextExp))
+  inst.components.talker:Say(talk_str , 4, false)
+end
+
 local function onkill(inst, data)
   -- print(inst.components.combat.defaultdamage)
   -- print(inst.components.locomotor.runspeed)
@@ -29,12 +34,12 @@ local function onkill(inst, data)
 
     inst.LevelupExp = inst.LevelupExp - inst.LevelupNextExp
     inst.LevelupLevel = inst.LevelupLevel + 1
-    inst.LevelupNextExp = inst.LevelupNextExp + 1 / inst.LevelupLevel
+    inst.LevelupNextExp = inst.LevelupNextExp + math.ceil(10 / inst.LevelupLevel)
     setCharacterAttribute(inst)
-    local talk_str = string.format("level: %d, exp: %d/%d", inst.LevelupLevel, inst.LevelupExp, math.ceil(inst.LevelupNextExp))
+    say(inst)
   end
 
-  inst.components.talker:Say(talk_str , 4, false)
+  
 
 end
 local function onload(inst, data) 
@@ -59,7 +64,7 @@ local function onload(inst, data)
   if data then
     inst.LevelupExp = data.LevelupExp or 0
     inst.LevelupLevel = data.LevelupLevel or 0
-    inst.LevelupNextExp = data.LevelupNextExp or 2
+    inst.LevelupNextExp = data.LevelupNextExp or 10
   end
 
   setCharacterAttribute(inst)
@@ -67,6 +72,8 @@ local function onload(inst, data)
   -- inst:ListenForEvent("attacked", function(inst, data) onkill(inst, data) end)
   inst:ListenForEvent("entity_death", function(wrld, data) onkill(inst, data) end, GetWorld())
   -- inst:ListenForEvent("entity_death", function(wrld, data) onkill(inst, data) end)
+
+  GLOBAL.TheInput:AddKeyDownHandler(GLOBAL.KEY_L, function() say(inst) end)
 end
 
 local function onsave(inst, data)
