@@ -12,10 +12,11 @@ local function setCharacterAttribute(inst)
   inst.components.hunger.max = (inst.init_hunger + inst.LevelupLevel)
   inst.components.locomotor.walkspeed = (inst.init_walkspeed + inst.LevelupLevel / 10)
   inst.components.locomotor.runspeed = (inst.init_runspeed + inst.LevelupLevel / 10)
+  -- inst.components.combat.defaultdamage = (inst.init_defaultdamage + inst.LevelupLevel / 10)
 end
 
 local function onkill(inst, data)
-  print(inst.components.locomotor.attack)
+  -- print(inst.components.combat.defaultdamage)
   -- print(inst.components.locomotor.runspeed)
   -- print(TUNING.WILSON_WALK_SPEED)
   -- print(TUNING.WILSON_RUN_SPEED)
@@ -49,6 +50,7 @@ local function onload(inst, data)
   inst.init_hunger = inst.components.hunger.max
   inst.init_walkspeed = inst.components.locomotor.walkspeed
   inst.init_runspeed = inst.components.locomotor.runspeed
+  inst.init_defaultdamage = inst.components.combat.defaultdamage
 
   inst.LevelupExp = 0
   inst.LevelupLevel = 0
