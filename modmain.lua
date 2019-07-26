@@ -20,26 +20,30 @@ local function say(inst)
   inst.components.talker:Say(talk_str , 4, false)
 end
 
+
+
 local function onkill(inst, data)
   -- print(inst.components.combat.defaultdamage)
   -- print(inst.components.locomotor.runspeed)
   -- print(TUNING.WILSON_WALK_SPEED)
   -- print(TUNING.WILSON_RUN_SPEED)
+  -- print(inst.prefab)
 
-  local exp = data.inst.components.health.maxhealth / 100 
-  inst.LevelupExp = exp + inst.LevelupExp
+  -- and not data.inst:HasTag("veggie") 
+  if data.cause == inst.prefab and not data.inst:HasTag("structure") then
+    local exp = data.inst.components.health.maxhealth / 100 
+    inst.LevelupExp = exp + inst.LevelupExp
 
-  if inst.LevelupExp >= inst.LevelupNextExp then
-    inst.SoundEmitter:PlaySound("dontstarve/characters/wx78/levelup")
+    if inst.LevelupExp >= inst.LevelupNextExp then
+      inst.SoundEmitter:PlaySound("dontstarve/characters/wx78/levelup")
 
-    inst.LevelupExp = inst.LevelupExp - inst.LevelupNextExp
-    inst.LevelupLevel = inst.LevelupLevel + 1
-    inst.LevelupNextExp = inst.LevelupNextExp + math.ceil(10 / inst.LevelupLevel)
-    setCharacterAttribute(inst)
-    say(inst)
+      inst.LevelupExp = inst.LevelupExp - inst.LevelupNextExp
+      inst.LevelupLevel = inst.LevelupLevel + 1
+      inst.LevelupNextExp = inst.LevelupNextExp + math.ceil(10 / inst.LevelupLevel)
+      setCharacterAttribute(inst)
+      say(inst)
+    end
   end
-
-  
 
 end
 local function onload(inst, data) 
